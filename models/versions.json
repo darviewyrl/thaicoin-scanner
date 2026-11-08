@@ -1,0 +1,12 @@
+{
+  "defaultVersion": "v1",
+  "versions": [
+    {
+      "id": "v1",
+      "name": "Version 1",
+      "description": "โมเดลตัวแรก",
+      "url": "https://teachablemachine.withgoogle.com/models/f8TyAeHfu/",
+      "enabled": true
+    }
+  ]
+}

@@ -4,8 +4,43 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<meta name="description" content="ส่องเหรียญไทย ตรวจสอบเหรียญ 25 สตางค์ 1 บาท และ 10 บาท ด้วยกล้องและ AI">
-<title>ส่องเหรียญไทย — ตรวจสอบเหรียญด้วยกล้อง</title>
+<meta name="description" content="ตรวจสอบเหรียญไทยง่าย ๆ ผ่านกล้องด้วย AI">
+<title>ส่องเหรียญไทยด้วยกล้อง</title>
+
+<!-- Social sharing preview: LINE, Facebook, Discord -->
+<link rel="canonical" href="https://thaicoin-scanner.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="ส่องเหรียญไทยด้วยกล้อง">
+<meta property="og:title" content="ส่องเหรียญไทยด้วยกล้อง">
+<meta property="og:description" content="ตรวจสอบเหรียญไทยง่าย ๆ ผ่านกล้องด้วย AI">
+<meta property="og:url" content="https://thaicoin-scanner.vercel.app/">
+<meta property="og:image" content="https://thaicoin-scanner.vercel.app/assets/social/og-preview.png">
+<meta property="og:image:secure_url" content="https://thaicoin-scanner.vercel.app/assets/social/og-preview.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ส่องเหรียญไทยด้วยกล้อง เปิดกล้อง ส่องเหรียญ รู้ผล">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ส่องเหรียญไทยด้วยกล้อง">
+<meta name="twitter:description" content="ตรวจสอบเหรียญไทยง่าย ๆ ผ่านกล้องด้วย AI">
+<meta name="twitter:image" content="https://thaicoin-scanner.vercel.app/assets/social/og-preview.png">
+
+<!-- Website Favicon -->
+<link rel="icon" type="image/x-icon"
+      href="./assets/icons/favicon.ico">
+
+<link rel="icon" type="image/png" sizes="16x16"
+      href="./assets/icons/favicon-16x16.png">
+
+<link rel="icon" type="image/png" sizes="32x32"
+      href="./assets/icons/favicon-32x32.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180"
+      href="./assets/icons/apple-touch-icon.png">
+
+<link rel="manifest" href="./site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -941,12 +976,16 @@ header p{margin-top:3px;line-height:1.6;color:#717680}
  .about-view-number{font-size:1.55rem}
 }
 
+/* Connecting state: keep the preview placeholder visible until video playback is ready. */
+.camera.is-connecting .camera-placeholder svg{animation:cameraWaiting 1.5s ease-in-out infinite}
+@keyframes cameraWaiting{50%{opacity:.42;transform:scale(.93)}}
+@media(prefers-reduced-motion:reduce){.camera.is-connecting .camera-placeholder svg{animation:none}}
 </style>
 </head>
 <body>
 <main class="shell">
 <header class="header">
-  <div class="brand"><div class="header-copy"><h1>ส่องเหรียญไทย — พัฒนาโดย ไผ่</h1><p>ตรวจสอบเหรียญด้วยกล้องและ AI</p></div></div>
+  <div class="brand"><div class="header-copy"><h1>ส่องเหรียญไทย</h1><p>ตรวจสอบเหรียญด้วยกล้องและ AI</p></div></div>
   <div class="header-actions">
     <button class="help-btn" id="helpBtn" type="button" aria-haspopup="dialog" aria-controls="helpDialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.4 9a2.8 2.8 0 0 1 5.4 1c0 1.9-2.8 2.2-2.8 4"/><path d="M12 17.5h.01"/></svg><span>วิธีใช้งาน</span></button>
     <button class="help-btn about-trigger" id="aboutBtn" type="button" aria-label="เกี่ยวกับเว็บไซต์" aria-haspopup="dialog" aria-controls="aboutDialog" title="เกี่ยวกับเว็บไซต์"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v5"/><path d="M12 7.5h.01"/></svg></button>
@@ -964,7 +1003,7 @@ header p{margin-top:3px;line-height:1.6;color:#717680}
         <span class="sound-track" aria-hidden="true"><span class="sound-thumb"></span></span>
       </button>
     </div>
-    <div class="camera" id="cameraBox"><div class="camera-placeholder"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4l2-2h4l2 2h4v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg><strong>กล้องยังไม่เปิด</strong><span>กดเริ่มตรวจสอบเหรียญเพื่อเปิดกล้อง</span></div><video id="video" autoplay muted playsinline aria-label="ภาพสดจากกล้อง"></video><div class="reticle" aria-hidden="true"></div><div class="camera-tag">กล้องกำลังทำงาน</div><div class="camera-tip">วางเหรียญกลางวงกลม • ถือให้นิ่ง</div></div>
+    <div class="camera" id="cameraBox"><div class="camera-placeholder" role="status" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4l2-2h4l2 2h4v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg><strong id="cameraPlaceholderTitle">กล้องยังไม่เปิด</strong><span id="cameraPlaceholderDetail">กดเริ่มตรวจสอบเหรียญเพื่อเปิดกล้อง</span></div><video id="video" autoplay muted playsinline aria-label="ภาพสดจากกล้อง"></video><div class="reticle" aria-hidden="true"></div><div class="camera-tag">กล้องกำลังทำงาน</div><div class="camera-tip">วางเหรียญกลางวงกลม • ถือให้นิ่ง</div></div>
     <div class="controls">
       <button id="cameraBtn" class="main-btn" type="button"><svg id="cameraBtnIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4l2-2h4l2 2h4v12H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="cameraBtnLabel">เริ่มตรวจสอบเหรียญ</span></button>
     </div>
@@ -1201,6 +1240,16 @@ function setCameraUI(){
   cameraBtn.setAttribute('aria-busy',String(loading));
 
   $('cameraBox').classList.toggle('active',running);
+  const cameraTitle=$('cameraPlaceholderTitle');
+  const cameraDetail=$('cameraPlaceholderDetail');
+  if(loading){
+    cameraTitle.textContent='กำลังเชื่อมต่อกล้อง...';
+    cameraDetail.textContent='กรุณารอสักครู่ และอนุญาตให้เว็บไซต์ใช้กล้อง';
+  }else if(!running){
+    cameraTitle.textContent='กล้องยังไม่เปิด';
+    cameraDetail.textContent='กดเริ่มตรวจสอบเหรียญเพื่อเปิดกล้อง';
+  }
+  $('cameraBox').classList.toggle('is-connecting',loading&&!running);
 }
 function setSoundUI(){
   soundBtn.classList.toggle('sound-on',soundOn);
